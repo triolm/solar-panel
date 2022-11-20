@@ -70,4 +70,7 @@ public class Vector {
         return new Vector(dx, dy * Math.sin(angle) + dz * Math.cos(angle), dy * Math.cos(angle) - dz * Math.sin(angle))
             .normalize();
     }
+    public String toString() {
+        return this.getDX() + " " + this.getDY() + " " + this.getDZ();
+    }
 }

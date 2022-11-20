@@ -8,9 +8,9 @@ class Observer {
         this.lon = lon;
         this.earth = earth;
 
-        xPrime = new Vector(Math.cos(23.5), 0, -sin(23.5));
-        yPrime = new Vector(0, 1, 0);
-        zPrime = new Vector(Math.sin(23.5), 0, cos(23.5));
+        xPrime = new Vector(Math.cos(23.5), 0, -sin(23.5)).normalize();
+        yPrime = new Vector(0, 1, 0).normalize();
+        zPrime = new Vector(Math.sin(23.5), 0, cos(23.5)).normalize();
     }
 
     double getLat() {
@@ -21,15 +21,43 @@ class Observer {
         return lon;
     }
 
-    double getX() {
-        return Math.cos(lon) * earth.getRad() * Math.cos(lat);
+    Vector getX() {
+        return xPrime.scale(Math.cos(lon) * earth.getRad() * Math.cos(lat));
+        //return new Vector(Math.cos(lon) * earth.getRad() * Math.cos(lat),0,0);
     }
 
-    double getY() {
-        return Math.sin(lon) * earth.getRad() * Math.cos(lat);
+    Vector getY() {
+        return yPrime.scale(Math.sin(lon) * earth.getRad() * Math.cos(lat));
+        //return new Vector(0,Math.sin(lon) * earth.getRad() * Math.cos(lat),0);
     }
 
-    double getZ() {
-        return Math.sin(lat) * earth.getRad();
+    Vector getZ() {
+        return zPrime.scale(Math.sin(lat) * earth.getRad());
+        //return new Vector(0,0,Math.sin(lat) * earth.getRad());
+    }
+
+    Vector getPosVector() {
+        return
+            getX()
+            .add(getY())
+            .add(getZ());
+    }
+
+    Point getPos() {
+        return earth.getPos().add(getPosVector());
+    }
+
+    void tick() {
+        lon -= (2*Math.PI)/earth.getSiderealDay();
+    }
+
+    void draw() {
+        fill(255, 255, 255);
+        println(Math.pow(getPosVector().getDY(), 1/3));
+        if (getPosVector().getDY() < 0) {
+            circle((float)getPosVector().getDZ(),
+                (float)getPosVector().getDX(),
+                20f);
+        }
     }
 }
