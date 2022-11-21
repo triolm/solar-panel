@@ -5,7 +5,8 @@
 Earth e = new Earth(2000,
     365.25*24*60*60,
     23*3600+54*60+4,
-    150);
+    150,
+    Math.toRadians(23.5));
 
 Observer o = new Observer(0, 0, e);
 
@@ -15,6 +16,8 @@ void setup() {
 void draw() {
     background(20, 10, 0);
     translate(width/2, height/2);
+    scale(1, -1);
+    
     for (int i = 0; i < 100000 / 100; i++) {
         e.tick();
         o.tick();

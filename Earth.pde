@@ -1,12 +1,17 @@
 class Earth {
-    double distToSun, yearLen, siderealDayLen, angularPos, radius;
+    double distToSun, yearLen, siderealDayLen, angularPos, radius, tilt;
 
-    public Earth(double distToSun, double yearLen, double siderealDayLen, double radius) {
+    public Earth(double distToSun, double yearLen, double siderealDayLen, double radius, double tilt) {
         this.distToSun = distToSun;
         this.yearLen = yearLen;
         this.siderealDayLen = siderealDayLen;
         this.angularPos = 0;
         this.radius = radius;
+        this.tilt = tilt;
+    }
+
+    double getTilt() {
+        return tilt;
     }
 
     double getZ() {
@@ -40,7 +45,7 @@ class Earth {
 
     void draw() {
         fill(0, 150, 255);
-        circle(0,0, 300f);
+        circle(0, 0, 300f);
         //circle((float)(300*Math.cos(angularPos)), (float)(300*Math.sin(angularPos)), 30f);
     }
 }

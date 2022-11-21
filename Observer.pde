@@ -8,9 +8,10 @@ class Observer {
         this.lon = lon;
         this.earth = earth;
 
-        xPrime = new Vector(Math.cos(23.5), 0, -sin(23.5)).normalize();
+
+        xPrime = new Vector(Math.cos(earth.getTilt()), 0, -Math.sin(earth.getTilt())).normalize();
         yPrime = new Vector(0, 1, 0).normalize();
-        zPrime = new Vector(Math.sin(23.5), 0, cos(23.5)).normalize();
+        zPrime = new Vector(Math.sin(earth.getTilt()), 0, Math.cos(earth.getTilt())).normalize();
     }
 
     double getLat() {
@@ -43,6 +44,16 @@ class Observer {
             .add(getZ());
     }
 
+    Vector getVectorToSun() {
+        return new Point(0, 0, 0).subtract(getPos());
+    }
+
+    double getSunlight() {
+        double dp = getPosVector().dot(getVectorToSun());
+        if (dp < 0) return 0;
+        return 100 * dp;
+    }
+
     Point getPos() {
         return earth.getPos().add(getPosVector());
     }
@@ -53,11 +64,11 @@ class Observer {
 
     void draw() {
         fill(255, 255, 255);
-        println(Math.pow(getPosVector().getDY(), 1/3));
         if (getPosVector().getDY() < 0) {
-            circle((float)getPosVector().getDZ(),
-                (float)getPosVector().getDX(),
-                20f);
+            double scale = 2 * Math.pow(-getPosVector().getDY(), 1.0/2);
+            circle((float)getPosVector().getDX(),
+                (float)getPosVector().getDZ(),
+                20f + (float) scale);
         }
     }
 }
