@@ -10,6 +10,8 @@ class Earth {
         this.angularPos = 0;
         this.radius = radius;
         this.tilt = tilt;
+
+        //visualization variables
         this.scale = this.distToSun / 600;
         this.displaySize = 100f;
     }
@@ -17,27 +19,7 @@ class Earth {
     double getTilt() {
         return tilt;
     }
-
-    double getZ() {
-        return 0;
-    }
-
-    double getX() {
-        return Math.cos(angularPos) * distToSun;
-    }
-
-    double getY() {
-        return Math.sin(angularPos) * distToSun;
-    }
-
-    float getDisplayX() {
-        return (float)(this.getX() / scale);
-    }
-
-    float getDisplaySize() {
-        return displaySize;
-    }
-
+    //getters
     double getRad() {
         return radius;
     }
@@ -61,10 +43,31 @@ class Earth {
     double getDay() {
         return dayLen;
     }
+    
+    //coordinates
+    double getX() {
+        return Math.cos(angularPos) * distToSun;
+    }
+
+    double getY() {
+        return Math.sin(angularPos) * distToSun;
+    }
+
+    double getZ() {
+        return 0;
+    }
 
     void tick() {
         angularPos += (2*Math.PI) / yearLen;
         angularPos = angularPos % (2*Math.PI);
+    }
+
+    float getDisplayX() {
+        return (float)(this.getX() / scale);
+    }
+
+    float getDisplaySize() {
+        return displaySize;
     }
 
     void draw() {
@@ -76,6 +79,7 @@ class Earth {
     void drawAxis() {
         strokeWeight(3);
         stroke(255, 255, 255);
+        //draw line at tilt angle
         line(getDisplayX() - (float)(Math.sin(tilt) * displaySize * 2/3),
             -(float) (Math.cos(tilt) * displaySize * 2/3),
             getDisplayX() + (float)(Math.sin(tilt) * displaySize * 2/3),
