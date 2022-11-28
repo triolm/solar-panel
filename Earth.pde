@@ -1,13 +1,17 @@
 class Earth {
-    double distToSun, yearLen, siderealDayLen, angularPos, radius, tilt;
+    double distToSun, yearLen, dayLen, siderealDayLen, angularPos, radius, tilt, scale;
+    float displaySize;
 
-    public Earth(double distToSun, double yearLen, double siderealDayLen, double radius, double tilt) {
+    public Earth(double distToSun, double yearLen, double dayLen, double radius, double tilt) {
         this.distToSun = distToSun;
         this.yearLen = yearLen;
-        this.siderealDayLen = siderealDayLen;
+        this.dayLen = dayLen;
+        this.siderealDayLen = (yearLen*dayLen)/(yearLen+dayLen);
         this.angularPos = 0;
         this.radius = radius;
         this.tilt = tilt;
+        this.scale = this.distToSun / 600;
+        this.displaySize = 100f;
     }
 
     double getTilt() {
@@ -26,26 +30,56 @@ class Earth {
         return Math.sin(angularPos) * distToSun;
     }
 
+    float getDisplayX() {
+        return (float)(this.getX() / scale);
+    }
+
+    float getDisplaySize() {
+        return displaySize;
+    }
+
     double getRad() {
         return radius;
     }
 
+    double getYear() {
+        return this.yearLen;
+    }
+
     Point getPos() {
-        return new Point(this.getX(), this.getY(), this.getX());
+        return new Point(this.getX(), this.getY(), this.getZ());
+    }
+
+    double getAngularPos() {
+        return this.angularPos;
     }
 
     double getSiderealDay() {
         return siderealDayLen;
     }
 
+    double getDay() {
+        return dayLen;
+    }
+
     void tick() {
-        angularPos -= (2*Math.PI) / yearLen;
+        angularPos += (2*Math.PI) / yearLen;
         angularPos = angularPos % (2*Math.PI);
     }
 
     void draw() {
         fill(0, 150, 255);
-        circle(0, 0, 300f);
-        //circle((float)(300*Math.cos(angularPos)), (float)(300*Math.sin(angularPos)), 30f);
+        circle(getDisplayX(), 0, displaySize);
+        drawAxis();
+    }
+
+    void drawAxis() {
+        strokeWeight(3);
+        stroke(255, 255, 255);
+        line(getDisplayX() - (float)(Math.sin(tilt) * displaySize * 2/3),
+            -(float) (Math.cos(tilt) * displaySize * 2/3),
+            getDisplayX() + (float)(Math.sin(tilt) * displaySize * 2/3),
+            (float) (Math.cos(tilt) * displaySize * 2/3));
+        noStroke();
     }
 }

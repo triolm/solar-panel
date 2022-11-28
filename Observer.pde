@@ -49,9 +49,9 @@ class Observer {
     }
 
     double getSunlight() {
-        double dp = getPosVector().dot(getVectorToSun());
-        if (dp < 0) return 0;
-        return 100 * dp;
+        double dp = (getPosVector().normalize()).dot(getVectorToSun().normalize());
+        if (dp < 0)return 0;
+        return 1000 * dp;
     }
 
     Point getPos() {
@@ -64,11 +64,12 @@ class Observer {
 
     void draw() {
         fill(255, 255, 255);
-        if (getPosVector().getDY() < 0) {
-            double scale = 2 * Math.pow(-getPosVector().getDY(), 1.0/2);
-            circle((float)getPosVector().getDX(),
-                (float)getPosVector().getDZ(),
-                20f + (float) scale);
+        Vector drawVector = getPosVector().normalize().scale(earth.getDisplaySize()/2);
+        if (drawVector.getDY() < 0) {
+            double scale = 2 * Math.pow(-drawVector.getDY(), 1.0/2);
+            circle((float)drawVector.getDX() + earth.getDisplayX(),
+                (float)drawVector.getDZ(),
+                10f + (float) scale);
         }
     }
 }
