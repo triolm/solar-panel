@@ -16,20 +16,16 @@ class Earth {
         this.displaySize = 100f;
     }
 
+    //getters ----
     double getTilt() {
         return tilt;
     }
-    //getters
     double getRad() {
         return radius;
     }
 
     double getYear() {
         return this.yearLen;
-    }
-
-    Point getPos() {
-        return new Point(this.getX(), this.getY(), this.getZ());
     }
 
     double getAngularPos() {
@@ -43,8 +39,8 @@ class Earth {
     double getDay() {
         return dayLen;
     }
-    
-    //coordinates
+
+    //coordinates ----
     double getX() {
         return Math.cos(angularPos) * distToSun;
     }
@@ -53,15 +49,22 @@ class Earth {
         return Math.sin(angularPos) * distToSun;
     }
 
+    //earth is always on the ecliptic plane
     double getZ() {
         return 0;
     }
 
+    Point getPos() {
+        return new Point(this.getX(), this.getY(), this.getZ());
+    }
+
+    //move one second
     void tick() {
         angularPos += (2*Math.PI) / yearLen;
         angularPos = angularPos % (2*Math.PI);
     }
 
+    //display ----
     float getDisplayX() {
         return (float)(this.getX() / scale);
     }
@@ -76,6 +79,7 @@ class Earth {
         drawAxis();
     }
 
+    //draw line through earth at the angle of the tilt
     void drawAxis() {
         strokeWeight(3);
         stroke(255, 255, 255);
